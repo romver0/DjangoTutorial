@@ -1,9 +1,28 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 
+from myapp.models import Car
+
 
 def index(request):
-    return HttpResponse('Домашнаяя страница')
+    # return HttpResponse('Домашнаяя страница')
+    # return HttpResponse('''
+    # <html>
+    # <head>
+    #          <title>Заголовок</title>
+    # </head>
+    # <body>
+    #     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    # </body>
+    # </html>
+    # ''')
+    car = Car.objects.all()
+    menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+    context = {
+        'cars': car,
+        'menu': menu
+    }
+    return render(request, 'index.html', context=context)
 
 
 # def categories(request, car_id):
@@ -12,7 +31,7 @@ def index(request):
 def categories(request, type):
     if type == 'return':
         print('сработал ')
-        return redirect('home', permanent=True) # redirect 301(постоянный адрес)
+        return redirect('home', permanent=True)  # redirect 301(постоянный адрес)
     return HttpResponse(f"<h1>Статья по категориям</h1> {type}")
 
 
