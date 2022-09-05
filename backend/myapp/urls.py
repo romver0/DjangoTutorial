@@ -8,5 +8,10 @@ urlpatterns = [
     path('', index, name='home'),
     # path('car/<int:car_id>/',views.categories)
     path('cars/<slug:type>/', categories, name='cars'),
-    re_path(r'archive/(?P<year>[0-9]{4})/', archive, name='archive'), #для регулярок
+    re_path(r'archive/(?P<year>[0-9]{4})/', archive, name='archive'),  # для регулярок
+    path('about/', about, name='about'),
+    path('post/', addPost, name='addPost'),
+    path('filter/', filterViews, name='filter'),
+    path('feedback/', feedback, name='feedback'),
+    path('login/', login, name='login')
 ]
