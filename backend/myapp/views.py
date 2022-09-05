@@ -3,6 +3,31 @@ from django.shortcuts import render, redirect
 
 from myapp.models import Car
 
+menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+menu = {
+    'about': "О сайте",
+    'addPost': "Добавить статью",
+    'feedback': "Обратная связь",
+    'login': "Войти",
+}
+
+def filterViews(request):
+    len = [1, 2, 3]
+    text = "<b>Lorem</b> ipsum <bdi>dolor</bdi>"
+    test = Car.objects.all()
+    context = {
+        'test': test,
+        'car': test[0].title,
+        'text': text,
+        'len': len,
+        'dict_': {
+            'value1': 'a',
+            'value2': 'b',
+            'value3': 'c',
+        }
+    }
+    return render(request, 'filter.html', context=context)
+
 
 def index(request):
     # return HttpResponse('Домашнаяя страница')
@@ -16,18 +41,42 @@ def index(request):
     # </body>
     # </html>
     # ''')
-    car = Car.objects.all()
-    menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+    # car = Car.objects.all()
+    car = Car.objects.order_by('-time_update')
     context = {
         'cars': car,
-        'menu': menu
+        'menu': menu,
+        'title': 'Главная страница'
     }
     return render(request, 'index.html', context=context)
 
 
+def about(request):
+    context = {
+        'menu': menu,
+        'title': 'О сайте'
+    }
+    return render(request, 'about.html', context=context)
+
+
+def addPost(request):
+    context = {
+        'menu': menu,
+        'title': 'Добавить статью'
+    }
+    return render(request, 'addPost.html', context=context)
+
+
+def feedback(request):
+    return render(request, 'feedback.html')
+
+
+def login(request):
+    return render(request, 'login.html')
+
+
 # def categories(request, car_id):
 #     return HttpResponse(f"<h1>Статья по категориям</h1> {car_id}")
-
 def categories(request, type):
     if type == 'return':
         print('сработал ')
