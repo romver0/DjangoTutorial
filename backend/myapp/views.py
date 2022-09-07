@@ -6,10 +6,11 @@ from myapp.models import Car
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 menu = {
     'about': "О сайте",
-    'addPost': "Добавить статью",
+    'addpage': "Добавить статью",
     'feedback': "Обратная связь",
     'login': "Войти",
 }
+
 
 def filterViews(request):
     len = [1, 2, 3]
@@ -59,12 +60,16 @@ def about(request):
     return render(request, 'about.html', context=context)
 
 
-def addPost(request):
+def addpage(request):
+    return render(request, 'addpage.html')
+
+
+def post(request, post_id):
     context = {
-        'menu': menu,
-        'title': 'Добавить статью'
+        'post_id': post_id,
     }
-    return render(request, 'addPost.html', context=context)
+    print(request.GET)
+    return render(request, 'post.html', context=context)
 
 
 def feedback(request):
