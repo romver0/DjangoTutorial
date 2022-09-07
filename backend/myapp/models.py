@@ -4,6 +4,7 @@ from django.urls import reverse
 
 class Car(models.Model):
     PRICE_CHOICES = [
+        ('N', 'Не продаётся'),
         ('M', 'По корману'),
         ('MM', 'Придётся взять в кредит'),
         ('MMM', 'Не вариант')
@@ -12,16 +13,20 @@ class Car(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название тачки')
     price = models.CharField(
         max_length=3,
-        choices=PRICE_CHOICES, default='норм',
+        choices=PRICE_CHOICES, default='N',
         verbose_name='Цена'
     )
     content = models.TextField(verbose_name='Описание+характеристики')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d",
                               verbose_name='фото авто')  # В параметр upload_to можно прописывать шаблон.Например, %Y/%m/%d описывает вложенные папки как год,месяц,день
+    # photo = models.ImageField(upload_to=f"photos/машины/{}/{} ",
+    #                           verbose_name='фото авто')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     is_published = models.BooleanField(default=True)
+    category_id = models.ForeignKey('Category', on_delete=models.PROTECT)
 
+    # магический метод
     def __str__(self):
         return self.title + '🚗'
 
@@ -32,6 +37,7 @@ class Car(models.Model):
         return reverse('post', kwargs={
             'post_id': self.pk
         })
+
     '''
     Почему это лучше тега url? Представьте, 
     что в будущем мы изменили шаблон этой ссылки и стали
@@ -42,3 +48,10 @@ class Car(models.Model):
       Теперь, с методом get_absolute_url() 
       нам достаточно изменить маршрут в нем и это автоматически скажется на всех шаблонах, где она используется.
     '''
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+
+    def __str__(self):
+        return self.name
