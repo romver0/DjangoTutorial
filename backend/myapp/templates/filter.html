@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <ol>
+            <li id="autoescape">
+                <p>Autoescape</p>
+                <p>Включён</p>
+                {% autoescape on %}
+                     {{ text }}
+                {% endautoescape %}
+                <p>Выключен</p>
+                {% autoescape off %}
+                    {{ text }}
+                {% endautoescape %}
+
+            </li><hr>
+{#            <li id="Block">#}
+{#                <p>block</p>#}
+{#                {% block text1 %}{% endblock %}#}
+{#                {% block text2 %}{% endblock %}#}
+{#            </li>#}
+            <li id="comment">
+                <p>Comment</p>
+            Игнорирование текста
+                {% comment 'Необязательное примечание' %}
+                    Это полезно при комментировании кода для документирования того, почему код был отключен.
+                {% endcomment %}
+            </li><hr>
+            <li id="cycle">
+                <p>Cycle</p>
+                {% for item in len %}
+                <span class="{% cycle 'row1' 'row2' %}">...</span>
+                {% endfor %}
+{#            Вывод#}
+{#            <li id="cycle">#}
+{#                #}
+{#                <span class="row1">...</span>#}
+{#                #}
+{#                <span class="row2">...</span>#}
+{#                #}
+{#            </li>#}
+            </li><hr>
+            <li id="filter">
+                <p>Filter</p>
+{#                {% for item in test %}#}
+{#                    {% filter force_escape|upper %}#}
+{#                    {{ item }}#}
+{#                    {% endfilter %}#}
+{#                {% endfor %}#}
+                {% filter force_escape|upper %}
+                    {{ car }}
+                {% endfilter %}
+            {% filter force_escape|lower %}
+                    {{ car }}
+                {% endfilter %}
+            </li><hr>
+            <li id="firstof">
+                <p>Firstof</p>
+                {% firstof var1 var2 car 'Все ложны' %}<p></p>
+                {% firstof var1 var2 var3 'Все ложны' %}
+            </li><hr>
+            <li id="for empty">
+                {% for key,value in dict_.items %}
+                    {{ key }}:{{ value }}
+                    {% empty %}
+                    не существует dict_
+                {% endfor %}
+                <br>
+                {% for key,value in AAA.items %}
+                    {{ key }}:{{ value }}
+                    {% empty %}
+                    не существует 'AAA'
+                {% endfor %}
+
+            </li><hr>
+            <li id="is not">
+                {% if car is not None %}
+                    ...
+                {% endif %}
+                {% if car is None %}
+                    ...
+                {% endif %}
+            </li><hr>
+            <li id="filter">
+            {{ car }}
+                {% if car|length < 110 %}
+                    сработал фильтр
+                    <br>
+                    {% if car|length == 4 %}
+                    сработал фильтр2
+                    {% endif %}
+                {% endif %}
+
+            </li><hr>
+            <li id="ifchanged">
+{#                {% for item in test %}#}
+{#                    {% ifchanged %}#}
+{#                        {{ item.time_create }}#}
+{#                    {% endifchanged %}#}
+{#                {% endfor %}#}
+                Продолжить https://django.fun/docs/django/ru/4.0/ref/templates/builtins/#linebreaks
+            </li><hr>
+            <li></li><hr>
+            <li></li><hr>
+            <li></li><hr>
+        <li></li><hr>
+        </ol>
+
+{% endblock %}
