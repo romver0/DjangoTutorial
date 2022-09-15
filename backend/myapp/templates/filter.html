@@ -105,5 +105,12 @@
             <li></li><hr>
         <li></li><hr>
         </ol>
+        {% for car_item in test %}
+            <span style="color:green">{{ forloop.counter }}</span>
+            <span style="color:red">{{ forloop.counter0 }}</span>
+            <span style="color:yellow">{{ forloop.revcounter }}</span>
+            {{ car_item }}
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
 
 {% endblock %}
