@@ -17,14 +17,14 @@ class Car(models.Model):
         verbose_name='Цена'
     )
     content = models.TextField(verbose_name='Описание+характеристики')
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d",
-                              verbose_name='фото авто')  # В параметр upload_to можно прописывать шаблон.Например, %Y/%m/%d описывает вложенные папки как год,месяц,день
-    # photo = models.ImageField(upload_to=f"photos/машины/{}/{} ",
-    #                           verbose_name='фото авто')
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d',
+                              verbose_name='фото авто',
+                              # default='photos/test/font1.png',
+                              )  # В параметр upload_to можно прописывать шаблон.Например, %Y/%m/%d описывает вложенные папки как год,месяц,день
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     is_published = models.BooleanField(default=True)
-    category_id = models.ForeignKey('Category', on_delete=models.PROTECT)
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
 
     # магический метод
     def __str__(self):
@@ -37,6 +37,9 @@ class Car(models.Model):
         return reverse('post', kwargs={
             'post_id': self.pk
         })
+
+    def get(self):
+        return self.title
 
     '''
     Почему это лучше тега url? Представьте, 
@@ -55,3 +58,38 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={
+            'category_id': self.pk
+        })
+
+    '''
+    про db_index
+    Это не совсем специфично для джанго; больше связано с базами данных. Вы добавляете индексы в столбцы, когда хотите ускорить поиск в этом столбце.    
+    Обычно база данных индексирует только первичный ключ. Это означает, что поиск с использованием первичного ключа оптимизирован.
+    Если вы выполняете много операций поиска во вторичном столбце, рассмотрите возможность добавления индекса к этому столбцу, чтобы ускорить процесс.
+    Имейте в виду, что, как и большинство проблем с масштабом, они применимы только в том случае, если у вас есть статистически большое количество строк (10 000 — это немного).
+    Кроме того, каждый раз, когда вы выполняете вставку, необходимо обновлять индексы. Поэтому будьте осторожны, в какой столбец вы добавляете индексы.
+    Как всегда, вы можете оптимизировать только то, что можете измерить, поэтому используйте EXPLAINоператор и журналы вашей базы данных (особенно любые журналы медленных запросов), чтобы узнать, где могут быть полезны индексы.
+    '''
+
+#
+# class ExamplePerson(models.Model):
+#     CHOICES = (
+#         ('M', 'мужик'),
+#         ('F', 'девушка')
+#     )
+#     name = models.CharField()
+#     sex = models.CharField(max_length=1, choices=CHOICES)
+#     age = models.IntegerField()
+#
+#     def get_absolute_url(self):
+#         return reverse('myurl', kwargs={
+#             'id': self.id,
+#             'name': self.name
+#         })
+#
+#     def get_absolute_url2(self):
+#         return f'/person/{self.name}/'
+

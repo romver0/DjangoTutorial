@@ -14,5 +14,6 @@ urlpatterns = [
     path('post/<int:post_id>/', post, name='post'),
     path('filter/', filterViews, name='filter'),
     path('feedback/', feedback, name='feedback'),
-    path('login/', login, name='login')
+    path('login/', login, name='login'),
+    path('category/<int:category_id>', show_category, name='category'),
 ]

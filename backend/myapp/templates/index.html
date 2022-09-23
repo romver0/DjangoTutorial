@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{#{% block content %}#}
+{#    {% for car in cars %}#}
+{#        <h3>{{ car | upper }}</h3>#}
+{#    {% endfor %}#}
+{##}
+{#{% endblock%}#}
+
+{% block content %}
+<ul class="list-articles">
+	{% for car in cars %}
+{#			<li><h2>{{car.title}}</h2>#}
+    <li><div class="article-panel">
+        	<p class="first">Категория: {{car.category_id}}</p>
+	        <p class="last">Дата: {{car.time_update|date:"d-m-Y H:i:s"}}</p>
+    </div></li>
+	{% autoescape off %}
+	{{ car.content|linebreaks|truncatewords:50 }}
+{# autoescape - экранирование сиволов #}
+{#linebreaks-Заменяет переносы строк в обычном тексте на соответствующие HTML#}
+{#  truncatewords - секает строку после определенного количества слов#}
+	{% endautoescape %}
+			<div class="clear"></div>
+{#			<p class="link-read-post"><a href="{% url 'post' car.pk %}">Читать пост</a></p>#}
+            <p class="link-read-post"><a href="{{  car.get_absolute_url }}">Читать пост</a></p>
+
+			</li>
+	{% endfor %}
+</ul>
+{% endblock %}

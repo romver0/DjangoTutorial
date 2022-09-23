@@ -41,10 +41,23 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		<li class="selected">Все категории</li>
-		<li><a href="#">Транспортные</a></li>
-		<li><a href="#">Специальные</a></li>
-		<li><a href="#">Гоночные</a></li>
+        {% if len == 0 %}
+            <li class="selected">Все категории</li>
+        {% else %}
+            <li><a href="{% url 'home' %}">Все категории</a></li>
+        {% endif %}
+    {% for category in categories %}
+        {% if category.pk == categories_selected %}
+            <li class="selected">{{category.name}}</li>
+        {% else %}
+            <li>
+            <a href="{{category.get_absolute_url}}">
+                {{ category.name }}
+            </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+
 		<li class="share">
 		<p>Мои контакты:</p>
             <a href="https://icons.getbootstrap.com/icons/telegram/">
@@ -89,7 +102,7 @@
 <!-- Footer -->
 <tr><td valign=top>
 	<div id="footer">
-		<p>&copy; 2021 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.</p>
+		<p>&copy; 2022 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.</p>
 	</div>
 </td></tr></table>
 <!-- Конец footer'а и страницы -->

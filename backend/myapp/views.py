@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 
-from myapp.models import Car
+from myapp.models import *
 
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 menu = {
@@ -25,29 +25,22 @@ def filterViews(request):
             'value1': 'a',
             'value2': 'b',
             'value3': 'c',
-        }
+        },
+        'static_len': 0,
     }
     return render(request, 'filter.html', context=context)
 
 
 def index(request):
-    # return HttpResponse('Домашнаяя страница')
-    # return HttpResponse('''
-    # <html>
-    # <head>
-    #          <title>Заголовок</title>
-    # </head>
-    # <body>
-    #     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    # </body>
-    # </html>
-    # ''')
-    # car = Car.objects.all()
     car = Car.objects.order_by('-time_update')
+    category = Category.objects.order_by('name')
     context = {
         'cars': car,
+        'categories': category,
         'menu': menu,
-        'title': 'Главная страница'
+        'len': car.count(),
+        'title': 'Главная страница',
+        'categories_selected': 0
     }
     return render(request, 'index.html', context=context)
 
@@ -107,6 +100,19 @@ def archive(request, year):
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена,Сэр</h1>')
+
+
+def show_category(request, category_id):
+    car = Car.objects.order_by('-time_update')
+    category = Category.objects.order_by('name')
+    context = {
+        'cars': car,
+        'categories': category,
+        'menu': menu,
+        'title': 'Отображение по рубрикам',
+        'categories_selected': category_id
+    }
+    return render(request, 'index.html', context=context)
 
 
 '''
